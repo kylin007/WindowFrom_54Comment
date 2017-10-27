@@ -15,4 +15,12 @@ E:\学习\五四公社文章评论管理\Comment_WindowsForm\WindowsFormsApplica
 E:\学习\五四公社文章评论管理\Comment_WindowsForm\WindowsFormsApplication1\WindowsFormsApplication1\bin\x64\Debug\CefSharp.Core.xml
 E:\学习\五四公社文章评论管理\Comment_WindowsForm\WindowsFormsApplication1\WindowsFormsApplication1\obj\x64\Debug\WindowsFormsApplication1.exe
 E:\学习\五四公社文章评论管理\Comment_WindowsForm\WindowsFormsApplication1\WindowsFormsApplication1\obj\x64\Debug\WindowsFormsApplication1.pdb
+E:\学习\五四公社文章评论管理\Comment_WindowsForm\WindowsFormsApplication1\WindowsFormsApplication1\bin\x64\Debug\Ivony.Core.dll
+E:\学习\五四公社文章评论管理\Comment_WindowsForm\WindowsFormsApplication1\WindowsFormsApplication1\bin\x64\Debug\Ivony.Html.dll
+E:\学习\五四公社文章评论管理\Comment_WindowsForm\WindowsFormsApplication1\WindowsFormsApplication1\bin\x64\Debug\Ivony.Html.Parser.dll
+E:\学习\五四公社文章评论管理\Comment_WindowsForm\WindowsFormsApplication1\WindowsFormsApplication1\bin\x64\Debug\Ivony.Html.Parser.Regulars.dll
+E:\学习\五四公社文章评论管理\Comment_WindowsForm\WindowsFormsApplication1\WindowsFormsApplication1\bin\x64\Debug\Ivony.Core.xml
+E:\学习\五四公社文章评论管理\Comment_WindowsForm\WindowsFormsApplication1\WindowsFormsApplication1\bin\x64\Debug\Ivony.Html.xml
+E:\学习\五四公社文章评论管理\Comment_WindowsForm\WindowsFormsApplication1\WindowsFormsApplication1\bin\x64\Debug\Ivony.Html.Parser.xml
+E:\学习\五四公社文章评论管理\Comment_WindowsForm\WindowsFormsApplication1\WindowsFormsApplication1\obj\x64\Debug\WindowsFormsApplication1.CommonComment.resources
 E:\学习\五四公社文章评论管理\Comment_WindowsForm\WindowsFormsApplication1\WindowsFormsApplication1\obj\x64\Debug\WindowsFormsApplication1.csprojResolveAssemblyReference.cache

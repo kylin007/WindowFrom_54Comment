@@ -1,9 +1,0 @@
-E:\学习\五四公社文章评论管理\Comment_WindowsForm\WindowsFormsApplication1\WindowsFormsApplication1\bin\Debug\WindowsFormsApplication1.exe.config
-E:\学习\五四公社文章评论管理\Comment_WindowsForm\WindowsFormsApplication1\WindowsFormsApplication1\bin\Debug\WindowsFormsApplication1.exe
-E:\学习\五四公社文章评论管理\Comment_WindowsForm\WindowsFormsApplication1\WindowsFormsApplication1\bin\Debug\WindowsFormsApplication1.pdb
-E:\学习\五四公社文章评论管理\Comment_WindowsForm\WindowsFormsApplication1\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.csprojResolveAssemblyReference.cache
-E:\学习\五四公社文章评论管理\Comment_WindowsForm\WindowsFormsApplication1\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.Form1.resources
-E:\学习\五四公社文章评论管理\Comment_WindowsForm\WindowsFormsApplication1\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.Properties.Resources.resources
-E:\学习\五四公社文章评论管理\Comment_WindowsForm\WindowsFormsApplication1\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.csproj.GenerateResource.Cache
-E:\学习\五四公社文章评论管理\Comment_WindowsForm\WindowsFormsApplication1\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.exe
-E:\学习\五四公社文章评论管理\Comment_WindowsForm\WindowsFormsApplication1\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.pdb
