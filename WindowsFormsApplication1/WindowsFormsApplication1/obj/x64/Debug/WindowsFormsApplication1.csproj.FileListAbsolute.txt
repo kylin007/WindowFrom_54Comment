@@ -24,3 +24,8 @@ E:\学习\五四公社文章评论管理\Comment_WindowsForm\WindowsFormsApplica
 E:\学习\五四公社文章评论管理\Comment_WindowsForm\WindowsFormsApplication1\WindowsFormsApplication1\bin\x64\Debug\Ivony.Html.Parser.xml
 E:\学习\五四公社文章评论管理\Comment_WindowsForm\WindowsFormsApplication1\WindowsFormsApplication1\obj\x64\Debug\WindowsFormsApplication1.CommonComment.resources
 E:\学习\五四公社文章评论管理\Comment_WindowsForm\WindowsFormsApplication1\WindowsFormsApplication1\obj\x64\Debug\WindowsFormsApplication1.csprojResolveAssemblyReference.cache
+E:\学习\五四公社文章评论管理\Comment_WindowsForm\WindowsFormsApplication1\WindowsFormsApplication1\bin\x64\Debug\System.Net.Http.Extensions.dll
+E:\学习\五四公社文章评论管理\Comment_WindowsForm\WindowsFormsApplication1\WindowsFormsApplication1\bin\x64\Debug\System.Net.Http.Primitives.dll
+E:\学习\五四公社文章评论管理\Comment_WindowsForm\WindowsFormsApplication1\WindowsFormsApplication1\bin\x64\Debug\System.Net.Http.Extensions.xml
+E:\学习\五四公社文章评论管理\Comment_WindowsForm\WindowsFormsApplication1\WindowsFormsApplication1\bin\x64\Debug\System.Net.Http.Primitives.xml
+E:\学习\五四公社文章评论管理\Comment_WindowsForm\WindowsFormsApplication1\WindowsFormsApplication1\obj\x64\Debug\WindowsFormsApplication1.csproj.App.config

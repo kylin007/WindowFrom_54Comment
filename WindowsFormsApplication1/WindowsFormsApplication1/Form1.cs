@@ -11,6 +11,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -43,22 +44,12 @@ namespace WindowsFormsApplication1
         /// <param name="e"></param>
         private void Form1_Load(object sender, EventArgs e)
         {
-            // TODO:  这行代码将数据加载到表“_54CommentDataSet2.User”中。您可以根据需要移动或删除它。
-            //this.userTableAdapter1.Fill(this._54CommentDataSet2.User);
-            // TODO:  这行代码将数据加载到表“_54CommentDataSet1.TemporaryTable”中。您可以根据需要移动或删除它。
-            //this.temporaryTableTableAdapter.Fill(this._54CommentDataSet1.TemporaryTable);
-            // TODO:  这行代码将数据加载到表“_54CommentDataSet.User”中。您可以根据需要移动或删除它。
-            //this.userTableAdapter.Fill(this._54CommentDataSet.User);
-            //WebView webView = new WebView();
-            //webView.Address = "http://www.baidu.com";
-            //webView.Dock = DockStyle.Fill;
-            //this.Controls.Add(webView);
 
             //必须进行初始化，否则就出来页面啦。
             CefSharp.Cef.Initialize();
 
             //实例化控件
-            wb = new ChromiumWebBrowser("http://www.hi-54.com");
+            wb = new ChromiumWebBrowser("http://www.***.com");
             //设置停靠方式
             wb.Dock = DockStyle.Fill;
 
@@ -91,7 +82,7 @@ namespace WindowsFormsApplication1
         {
             string url = wb.Address.ToString();
 
-            if (!url.Contains("http://www.hi-54.com/a-"))
+            if (!url.Contains("http://www.***.com/a-"))
             {
                 MessageBox.Show("请跳转至文章页面 ，再生成评论");
                 return;
@@ -134,7 +125,7 @@ namespace WindowsFormsApplication1
 
             string url = wb.Address.ToString();
 
-            if (!url.Contains("http://www.hi-54.com/a-"))
+            if (!url.Contains("http://www.***.com/a-"))
             {
                 MessageBox.Show("请跳转至文章页面 ，再生成评论");
                 return;
@@ -352,7 +343,7 @@ namespace WindowsFormsApplication1
 
             string url = wb.Address.ToString();
 
-            if (!url.Contains("http://www.hi-54.com/a-"))
+            if (!url.Contains("http://www.***.com/a-"))
             {
                 MessageBox.Show("请选择评论的文章，并进入详情页");
                 return;
@@ -467,18 +458,26 @@ namespace WindowsFormsApplication1
 
                 try
                 {
-                    ////执行API接口
-                    //PostData(UserId, PageId, Comment, CommentTime);
-                    ////删除数据
-                    //string sql_delete = "DELETE FROM [CreationComment] WHERE Id = " + Id;
-                    //database.deletesql(sql_delete);
-
-                    DBCommentNumber--;
-                    this.Invoke(new Action(() =>
+                    //执行API接口
+                    string result = PostData(UserId, PageId, Comment, CommentTime);
+                    if (result == string.Empty)
                     {
-                        label4.Text = DBCommentNumber.ToString();
-                    }));
-                    break;
+                        //删除数据
+                        string sql_delete = "DELETE FROM [CreationComment] WHERE Id = " + Id;
+                        //database.deletesql(sql_delete);
+
+                        DBCommentNumber--;
+                        this.Invoke(new Action(() =>
+                        {
+                            label4.Text = DBCommentNumber.ToString();
+                        }));
+                        break;
+                    }
+                    else
+                    {
+                        MessageBox.Show("发生如下错误：" + result);
+                    }
+                    
                 }
                 catch { }
                 
@@ -495,26 +494,50 @@ namespace WindowsFormsApplication1
         /// <param name="UserName"></param>
         /// <param name="Comment"></param>
         /// <param name="CommentTime"></param>
-        public void PostData(int UserId, int PageId, string Comment, DateTime CommentTime)
+        public static string PostData(int UserId, int PageId, string Comment, DateTime CommentTime)
         {
-            HttpWebRequest wReq = (HttpWebRequest)WebRequest.Create("http://localhost:37831/api/Values");
+            string postData = "{\"key\":\"*****\",\"articleId\": \"" + PageId.ToString() + "\" ,\"userId\": \"" + UserId.ToString() + "\" ,\"creationTime\": \"" + CommentTime.ToString() + "\" ,\"content\":\"" + Comment + "\"}";
             
-            wReq.Method = "Post";
+            string posturl = "http://******";
 
-            wReq.ContentType = "application/json";
-
-
-            byte[] data = Encoding.Default.GetBytes("{\"UserId\":\"" + UserId + "\",\"PageId\":\"" + PageId + "\",\"Comment\":\"" + Comment + "\",\"CommentTime\":\"" + CommentTime + "\"}");
-            wReq.ContentLength = data.Length;
-            Stream reqStream = wReq.GetRequestStream();
-            reqStream.Write(data, 0, data.Length);
-            reqStream.Close();
-            using (StreamReader sr = new StreamReader(wReq.GetResponse().GetResponseStream()))
+            Stream outstream = null;
+            Stream instream = null;
+            StreamReader sr = null;
+            HttpWebResponse response = null;
+            HttpWebRequest request = null;
+            Encoding encoding = Encoding.UTF8;
+            byte[] data = encoding.GetBytes(postData);
+            // 准备请求...
+            try
             {
-                string result = sr.ReadToEnd();
-            } 
+                // 设置参数
+                request = WebRequest.Create(posturl) as HttpWebRequest;
+                CookieContainer cookieContainer = new CookieContainer();
+                request.CookieContainer = cookieContainer;
+                request.AllowAutoRedirect = true;
+                request.Method = "POST";
+                request.ContentType = "application/json";//x-www-form-urlencoded";
+                request.ContentLength = data.Length;
+                outstream = request.GetRequestStream();
+                outstream.Write(data, 0, data.Length);
+                outstream.Close();
+                //发送请求并获取相应回应数据
+                response = request.GetResponse() as HttpWebResponse;
+                //直到request.GetResponse()程序才开始向目标网页发送Post请求
+                instream = response.GetResponseStream();
+                sr = new StreamReader(instream, encoding);
+                ////返回结果网页（html）代码
+                //string content = sr.ReadToEnd();
+                string err = string.Empty;
+                return err;
+            }
+            catch (Exception ex)
+            {
+                string err = ex.Message;
+                return err;
+            }
         }
-
+       
         /// <summary>
         /// 跳转首页按钮实现
         /// </summary>
@@ -522,8 +545,7 @@ namespace WindowsFormsApplication1
         /// <param name="e"></param>
         private void button5_Click(object sender, EventArgs e)
         {
-            //wb.Address = "http://www.hi-54.com";
-            this.wb.Load("http://www.hi-54.com");
+            this.wb.Load("http://www.***.com");
 
         }
 
