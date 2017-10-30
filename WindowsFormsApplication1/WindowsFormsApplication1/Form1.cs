@@ -13,8 +13,10 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Newtonsoft.Json;
 
 namespace WindowsFormsApplication1
 {
@@ -100,8 +102,8 @@ namespace WindowsFormsApplication1
             Random ran = new Random();
 
             int a_Index = dataGridView1.CurrentRow.Index;
-            int UserId = int.Parse(dataGridView1.Rows[a_Index].Cells[0].Value.ToString());
-            string UserName = dataGridView1.Rows[a_Index].Cells[1].Value.ToString();
+            int UserId = int.Parse(dataGridView1.Rows[a_Index].Cells["UserId"].Value.ToString());
+            string UserName = dataGridView1.Rows[a_Index].Cells["UserName"].Value.ToString();
 
             int index = ran.Next(0, datatable_DBComm.Rows.Count);
             string CommentText = datatable_DBComm.Rows[index]["CommentText"].ToString();
@@ -152,7 +154,7 @@ namespace WindowsFormsApplication1
             try
             {
                 var richTextBox_val = richTextBox1.Text;
-                index_count = int.Parse(richTextBox1.ToString());
+                index_count = int.Parse(richTextBox_val.ToString());
                 
             }
             catch {
@@ -223,7 +225,7 @@ namespace WindowsFormsApplication1
         public void UpdataComment()//更新评论
         {
             conn.Open();
-            string sql = "select Id,UserId,UserName,CommentText,CommentTime from [TemporaryTable]";
+            string sql = "select * from [TemporaryTable]";
             dapt2 = new SqlDataAdapter(sql, conn);
             datatable_linshiComm = new DataTable();
             dapt2.Fill(datatable_linshiComm);
@@ -349,13 +351,16 @@ namespace WindowsFormsApplication1
                 return;
             }
 
-            int PageId = int.Parse(url.Split('-')[2].ToString());
+            string[] sArray = Regex.Split(url, "/a-", RegexOptions.IgnoreCase);
+            int PageId = int.Parse(sArray[1].ToString());
 
             int seccesscount = 0;
             int nowinsert = 0;
+            var page_time = returnPageTime().Ticks;
 
             for (int i = 0; i < datatable_linshiComm.Rows.Count; i++)
             {
+                this.progressBar1.Maximum = datatable_linshiComm.Rows.Count;
                 int UserId = int.Parse(datatable_linshiComm.Rows[i]["UserId"].ToString());
                 string UserName = datatable_linshiComm.Rows[i]["UserName"].ToString();
                 string CommentText = datatable_linshiComm.Rows[i]["CommentText"].ToString();
@@ -381,23 +386,39 @@ namespace WindowsFormsApplication1
                         seccesscount++;
                     }
                 }
+                else if (timestamp > page_time)
+                {
+                    
+                    //接口提交
+                    string result = PostData(UserId, PageId, CommentText, CommentTime);
+                    if (result == string.Empty)
+                    {
+                        nowinsert++;
+                    }
+                    else
+                    {
+                        MessageBox.Show("发生如下错误：" + result);
+                        break;
+                    }
+                    
+                }
                 else
                 {
-                    nowinsert++;
-                    //接口提交
-                    PostData(UserId, PageId, CommentText, CommentTime);
+                    MessageBox.Show("由" + UserName + "发布的评论：" + CommentText + "因小于文章发布时间而将被移除\n 请勿随意修改评论时间");
                 }
+                this.progressBar1.Value = i+1;
             }
 
             UpDateDBCommentCount();
 
             if ((seccesscount+nowinsert)!=datatable_linshiComm.Rows.Count) {
-                MessageBox.Show(nowinsert + "条数据成功发布\n" + seccesscount + "条数据因大于系统时间存入数据库等待执行\n" + (datatable_linshiComm.Rows.Count-(seccesscount+nowinsert)) + "条插入数据库失败\n");
+                MessageBox.Show(nowinsert + "条数据成功发布\n" + seccesscount + "条数据因大于系统时间存入数据库等待执行\n" + (datatable_linshiComm.Rows.Count-(seccesscount+nowinsert)) + "条数据提交失败\n");
             }
             else {
                 MessageBox.Show(nowinsert + "条数据成功发布\n" + seccesscount + "条数据因大于系统时间存入数据库等待执行\n");
             }
 
+            this.progressBar1.Value = 0;
             string sql_ = "DELETE FROM [TemporaryTable]";
             database.deletesql(sql_);
             UpdataComment();
@@ -527,9 +548,25 @@ namespace WindowsFormsApplication1
                 instream = response.GetResponseStream();
                 sr = new StreamReader(instream, encoding);
                 ////返回结果网页（html）代码
-                //string content = sr.ReadToEnd();
-                string err = string.Empty;
-                return err;
+                string content = sr.ReadToEnd();
+                Newtonsoft.Json.Linq.JObject JsonResult = Newtonsoft.Json.Linq.JObject.Parse(content);
+                int resultnum = int.Parse(JsonResult["result"].ToString());
+                //0-成功 1-秘钥错误 2- 用户编码错误 3-文章编号错误
+                if (resultnum == 0)
+                {
+                    return string.Empty;
+                }
+                else if (resultnum == 1)
+                {
+                    return "秘钥错误";
+                }
+                else if (resultnum == 2)
+                {
+                    return "用户编码错误";
+                }
+                else{
+                    return "文章编号错误";
+                }
             }
             catch (Exception ex)
             {
